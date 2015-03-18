@@ -9,6 +9,10 @@ $logger = Logger.new STDOUT
 STDOUT.sync = true
 
 # connect to the database
-require 'active_record'
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
-ActiveRecord::Base.logger = $logger
+if (database_url = ENV['DATABASE_URL'])
+  require 'active_record'
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
+  ActiveRecord::Base.logger = $logger
+else
+  $logger.warn "missing DATABASE_URL, skipping ActiveRecord"
+end

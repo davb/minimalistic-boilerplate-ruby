@@ -8,7 +8,7 @@ before_fork do |server, worker|
     # Unicorn master intercept TERM and send QUIT instead
     Process.kill 'QUIT', Process.pid
   end
-  ActiveRecord::Base.connection.disconnect!
+  defined?(ActiveRecord) && ActiveRecord::Base.connection.disconnect!
 end 
 
 
@@ -17,5 +17,5 @@ after_fork do |server, worker|
     # Unicorn worker intercept TERM and do nothing.
     # Wait for master to send QUIT.
   end
-  ActiveRecord::Base.establish_connection
+  defined?(ActiveRecord) && ActiveRecord::Base.establish_connection
 end
